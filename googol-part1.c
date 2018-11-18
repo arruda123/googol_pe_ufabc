@@ -1,6 +1,6 @@
 /****************************************
 *     Projeto Googol - PE - 2018        *
-*           Gabrielle Arruda            *
+*  Gabrielle Arruda  -  11201721761     *
 *             Luigi Perillo             *
 *           Vinicius Teixeira           *
 *****************************************/
@@ -19,6 +19,8 @@ int sanitizeNumerao(char numerao[MAX_SIZE]);
 void imprimeNumerao(char numerao[MAX_SIZE], int tam);
 int soma(char numerao1[MAX_SIZE], int n1, char numerao2[MAX_SIZE], int n2);
 int subtracao(char numerao1[MAX_SIZE], int n1, char numerao2[MAX_SIZE], int n2);
+void trocasinal(char numerao1[MAX_SIZE], int tam);
+
 
 
 int main() {
@@ -35,7 +37,6 @@ int main() {
         
             tam1 = sanitizeNumerao(numerao1);
             tam2 = sanitizeNumerao(numerao2);        
-    
             switch(operador){
                 case '+': tam3 = soma(numerao1, tam1, numerao2, tam2);
                           break;
@@ -106,7 +107,7 @@ void imprimeNumerao(char numerao[MAX_SIZE], int tam) {
     if(numerao[0] == '-'){
         printf("%c", numerao[0]);
         for(i = 0; i < tam; i++) {
-            printf("%c", numerao[tam - i]);
+           printf("%c", numerao[tam - i]);
         }
     }else {
         for(i = 0; i < tam; i++) {
@@ -116,6 +117,18 @@ void imprimeNumerao(char numerao[MAX_SIZE], int tam) {
 
     printf("\n");
 }
+
+/*tranforma em negativo IMPLEMENTAR*/
+void sinalnegativo(char numerao1[MAX_SIZE], int tam){
+    int i;
+    char aux;
+    for(i = tam; i < 0; i--){
+        aux = numerao1[i];
+        numerao1[i+1] = aux;
+    }
+    numerao1[0] = '-';
+}
+
 
 /*
    Recebe: 
@@ -177,7 +190,18 @@ int soma(char numerao1[MAX_SIZE], int tam1, char numerao2[MAX_SIZE], int tam2) {
         /* Enviar para a função subtracao */
         tam = subtracao(numerao1, tam1, numerao2, tam2);
     }
-    /* caso 3: o primeiro numero negativo e o segundo positivo (implementar) */
+    /* caso 3: o primeiro numero negativo e o segundo positivo */
+    else{
+        /* Remover o sinal negativo do primeiro numero */
+        for (i = 0; i < (tam1 - 1); i++) {
+            cache = numerao1[i + 1];
+            numerao1[i + 1] = numerao1[i];
+            numerao1[i] = cache;
+        }
+        tam1--;
+        /* Enviar para a função subtracao */
+        tam = subtracao(numerao2, tam2, numerao1, tam1);
+    }
     return tam;
 }
 
@@ -272,9 +296,11 @@ int subtracao(char numerao1[MAX_SIZE], int tam1, char numerao2[MAX_SIZE], int ta
                 }
                 numerao1[i] = '0' + calculated;
             }
+            //sinalnegativo(numerao1, tam);
+            //tam++;
         }
     /* caso 2: se o segundo número é negativo, ele se transforma em positivo e é enviado para soma */
-    } else if (numerao2[0] == '-') {
+    } else if (numerao1[0] != '-' && numerao2[0] == '-') {
         /* Remover o sinal negativo do segundo numero */
         for (i = 0; i < (tam2 - 1); i++) {
             cache = numerao2[i + 1];
@@ -299,9 +325,19 @@ int subtracao(char numerao1[MAX_SIZE], int tam1, char numerao2[MAX_SIZE], int ta
             tam--;
         }
     }
+    /* caso 3: primeiro número é negativo, segundo positivo */
+    /*else if (numerao1[0] == '-' && numerao2[0] != '-') {
+        
+        
+    }*/
+
+    /* caso 4: Ambos negativos */
+    /*else{
+        
+    }*/
+
     
-    /* IMPLEMENTAR codigos abaixo */
-    /* Inserir o sinal negativo no inicio do numero */
+    
 
     return tam;
 }
